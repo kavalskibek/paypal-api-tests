@@ -5,6 +5,7 @@ on: [push, workflow_dispatch]
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
 
@@ -19,25 +20,26 @@ jobs:
 
       - name: Create .env
         run: |
-          echo "PAYPAL_CLIENT_ID=${{ secrets.PAYPAL_CLIENT_ID }}" >> .env
-          echo "PAYPAL_SECRET=${{ secrets.PAYPAL_SECRET }}" >> .env
-          echo "PAYPAL_BASE_URL=https://api-m.sandbox.paypal.com" >> .env
+          echo "PAYPAL_CLIENT_ID=${{ secrets.PAYPAL_CLIENT_ID }}" >> paypal_tests/.env
+          echo "PAYPAL_SECRET=${{ secrets.PAYPAL_SECRET }}" >> paypal_tests/.env
+          echo "PAYPAL_BASE_URL=https://api-m.sandbox.paypal.com" >> paypal_tests/.env
 
       - name: Run tests
-        run: pytest tests/ -v --alluredir=allure-result
+        working-directory: paypal_tests
+        run: pytest tests/ -v --alluredir=allure-results
 
       - name: Generate & Deploy Allure
         uses: simple-elf/allure-report-action@master
         if: always()
         with:
-          allure_results: allure-results
+          allure_results: paypal_tests/allure-results
+          allure_report: paypal_tests/allure-report
+          allure_history: paypal_tests/allure-history
           gh_pages: gh-pages
-          allure_report: allure-report
-          allure_history: allure-history
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: allure-report
+          publish_dir: paypal_tests/allure-report
