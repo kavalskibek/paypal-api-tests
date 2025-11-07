@@ -1,6 +1,10 @@
-from pathlib import Path
+import pytest
+import requests
 from dotenv import load_dotenv
 import os
+import allure
+from pathlib import Path
+
 
 env_path = Path(__file__).resolve().parent / ".env"
 if not env_path.exists():
