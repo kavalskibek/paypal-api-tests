@@ -24,7 +24,7 @@ jobs:
           echo "PAYPAL_BASE_URL=https://api-m.sandbox.paypal.com" >> .env
 
       - name: Run tests
-        run: pytest tests/ -v --alluredir=allure-results
+        run: pytest paypal_tests/tests/ -v --alluredir=allure-results
 
       - name: Generate & Deploy Allure
         uses: simple-elf/allure-report-action@master
