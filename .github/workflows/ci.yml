@@ -26,7 +26,7 @@ jobs:
           echo "PAYPAL_CLIENT_ID=${{ secrets.PAYPAL_CLIENT_ID }}" >> tests/.env
           echo "PAYPAL_SECRET=${{ secrets.PAYPAL_SECRET }}" >> tests/.env
           echo "PAYPAL_BASE_URL=https://api-m.sandbox.paypal.com" >> tests/.env
-
+      
 
       - name: Run tests
         run: pytest tests/ -v --alluredir=allure-results

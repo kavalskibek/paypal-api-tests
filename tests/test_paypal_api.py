@@ -1,20 +1,24 @@
-import pytest
-import requests
+from pathlib import Path
 from dotenv import load_dotenv
 import os
-import allure
 
-from pathlib import Path
-load_dotenv(dotenv_path=Path(__file__).resolve().parents[1] / ".env")
+env_path = Path(__file__).resolve().parent / ".env"
+if not env_path.exists():
+    env_path = Path(__file__).resolve().parents[1] / ".env"
 
-# Читаем переменные
+
+print(f"ℹ️ Using .env from: {env_path}")
+
+load_dotenv(dotenv_path=env_path)
+
 BASE_URL = os.getenv("PAYPAL_BASE_URL")
 CLIENT_ID = os.getenv("PAYPAL_CLIENT_ID")
 SECRET = os.getenv("PAYPAL_SECRET")
 
-# ПРОВЕРКА: если BASE_URL пустой — выводим ошибку
+
 if not BASE_URL or not CLIENT_ID or not SECRET:
     raise EnvironmentError("Check .env file: PAYPAL_BASE_URL, CLIENT_ID, SECRET must be set!")
+
 
 def get_token():
     url = f"{BASE_URL}/v1/oauth2/token"
